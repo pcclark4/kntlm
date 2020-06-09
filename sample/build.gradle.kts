@@ -1,5 +1,10 @@
 plugins {
     kotlin("jvm")
+    application
+}
+
+application {
+    mainClassName = "pcclark4.kntlm.sample.MainKt"
 }
 
 dependencies {

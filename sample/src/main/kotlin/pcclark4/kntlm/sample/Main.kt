@@ -3,19 +3,36 @@ package pcclark4.kntlm.sample
 import okhttp3.*
 import pcclark4.kntlm.NtlmCredentials
 import pcclark4.kntlm.NtlmHttp
+import java.lang.IndexOutOfBoundsException
 
-fun main() {
-    print("Enter URL: ")
-    val url = readLine()!!
+fun main(args: Array<String>) {
+    val url = try {
+        args[0]
+    } catch (e: IndexOutOfBoundsException) {
+        print("Enter URL: ")
+        readLine()!!
+    }
 
-    print("Enter domain: ")
-    val domain = readLine()!!
+    val domain = try {
+        args[1]
+    } catch (e: IndexOutOfBoundsException) {
+        print("Enter domain: ")
+        readLine()!!
+    }
 
-    print("Enter username: ")
-    val username = readLine()!!
+    val username = try {
+        args[2]
+    } catch (e: IndexOutOfBoundsException) {
+        print("Enter username: ")
+        readLine()!!
+    }
 
-    print("Enter password: ")
-    val password = readLine()!!
+    val password = try {
+        args[3]
+    } catch (e: IndexOutOfBoundsException) {
+        print("Enter password: ")
+        readLine()!!
+    }
 
     val credentials = NtlmCredentials(domain, username, password)
 
