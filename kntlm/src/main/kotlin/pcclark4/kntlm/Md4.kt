@@ -3,7 +3,7 @@ package pcclark4.kntlm
 import java.security.MessageDigest
 
 // Ripped from https://rosettacode.org/wiki/MD4#Kotlin
-class MD4() : MessageDigest("MD4"), Cloneable {
+internal class Md4() : MessageDigest("Md4"), Cloneable {
     private val blockLength = 64
     private var context = IntArray(4)
     private var count = 0L
@@ -14,13 +14,13 @@ class MD4() : MessageDigest("MD4"), Cloneable {
         engineReset()
     }
 
-    private constructor(md: MD4): this() {
+    private constructor(md: Md4): this() {
         context = md.context.clone()
         buffer = md.buffer.clone()
         count = md.count
     }
 
-    override fun clone(): Any = MD4(this)
+    override fun clone(): Any = Md4(this)
 
     override fun engineReset() {
         context[0] = 0x67452301

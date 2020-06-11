@@ -168,7 +168,7 @@ object Ntlm {
     }
 
     private fun generateNtlmV2Hash(creds: NtlmCredentials): ByteArray {
-        val ntlmHash = MD4().digest(creds.password.toByteArray(Charsets.UTF_16LE))
+        val ntlmHash = Md4().digest(creds.password.toByteArray(Charsets.UTF_16LE))
         val userDomain = "${creds.user.toUpperCase(Locale.ROOT)}${creds.domain}"
 
         val md5 = Mac.getInstance(HMAC_MD5_ALGORITHM_NAME)
