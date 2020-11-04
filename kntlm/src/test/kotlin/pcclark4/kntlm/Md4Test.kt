@@ -1,5 +1,3 @@
-@file:JvmName("Md4TestKt")
-
 package pcclark4.kntlm
 
 import org.junit.jupiter.api.Assertions

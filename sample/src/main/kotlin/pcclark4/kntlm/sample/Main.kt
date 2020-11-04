@@ -4,6 +4,13 @@ import okhttp3.*
 import pcclark4.kntlm.NtlmCredentials
 import pcclark4.kntlm.NtlmHttp
 import java.lang.IndexOutOfBoundsException
+import java.net.InetSocketAddress
+import java.net.Proxy
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.HostnameVerifier
+import javax.net.ssl.SSLContext
+import javax.net.ssl.X509TrustManager
 
 fun main(args: Array<String>) {
     val url = try {
@@ -36,9 +43,26 @@ fun main(args: Array<String>) {
 
     val credentials = NtlmCredentials(domain, username, password)
 
-    val client = OkHttpClient.Builder()
+    val builder = OkHttpClient.Builder()
         .authenticator(DefaultAuthenticator(credentials))
-        .build()
+//        .proxy(Proxy(Proxy.Type.HTTP, InetSocketAddress("192.168.0.134", 8888)))
+
+    val noCert = args.any { it == "-nocert" }
+    if (noCert) {
+        val trustManager = object : X509TrustManager {
+            override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) = Unit
+            override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
+        }
+
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, arrayOf(trustManager), SecureRandom())
+
+        builder.hostnameVerifier(HostnameVerifier { _, _ -> true})
+            .sslSocketFactory(sslContext.socketFactory, trustManager)
+    }
+
+    val client = builder.build()
     val request = Request.Builder().url(url).build()
     val response = client.newCall(request).execute()
     println(response)
